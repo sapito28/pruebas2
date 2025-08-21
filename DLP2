@@ -1,0 +1,44 @@
+var gulp = require('gulp'),
+	del = require('del'),
+	jshint = require('gulp-jshint'),
+	concat = require('gulp-concat'),
+	uglify = require('gulp-uglify'),
+	myth = require('gulp-myth'),
+	minifycss = require('gulp-minify-css'),
+	browserify = require('browserify'),
+	source = require('vinyl-source-stream'),
+	//imagemin = require('gulp-imagemin'),
+	browsersync = require('browser-sync'),
+	//reporters = require('jasmine-reporters'),
+	jasmine = require('gulp-jasmine');
+
+gulp.task('default', ['clean', 'build'], function(){
+	//gulp.start('build');
+});
+
+gulp.task('clean', function(cb) {
+	del(['tmp', 'www/*'], cb);
+});
+
+gulp.task('lint', function() {
+  return gulp.src(['lib/*.js', 'wwwsrc/*.js', 'conf/*.js', 'bin/*.js'])
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
+});
+
+gulp.task('unit-test', function () {
+    return gulp.src('spec/*.js')
+        .pipe(jasmine({
+        	//isVerbose: true,
+        	includeStackTrace:true
+            //reporter: new reporters.JUnitXmlReporter()
+        }));
+});
+
+gulp.task('build', ['build-html', 'build-js', 'build-css', 'build-img'], function(){
+});
+
+gulp.task('build-html', function(){
+	gulp.src('wwwsrc/index.html')
+		.pipe(gulp.dest('www'));
+});
